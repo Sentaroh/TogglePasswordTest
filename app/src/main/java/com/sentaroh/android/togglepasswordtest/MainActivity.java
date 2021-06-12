@@ -55,11 +55,12 @@ public class MainActivity extends AppCompatActivity {
                         public void onDestroyActionMode(ActionMode mode) {
                         }
                     });
+                    verifyPassword(message, password_view, confirm_view, password, confirm);
                 } else {
                     password.setTransformationMethod(new PasswordTransformationMethod());
                     password.setCustomSelectionActionModeCallback(null);
                     confirm_view.setVisibility(TextInputLayout.VISIBLE);
-                    message.setText("");
+                    verifyPassword(message, password_view, confirm_view, password, confirm);
                 }
             }
         });
@@ -77,13 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (password.getTransformationMethod()!=null) {
-                    if (!password.getText().toString().equals(confirm.getText().toString())) {
-                        message.setText("Password and confirm password unmatched");
-                    } else {
-                        message.setText("");
-                    }
-                }
+                verifyPassword(message, password_view, confirm_view, password, confirm);
             }
         });
 
@@ -100,17 +95,26 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (password.getTransformationMethod()!=null) {
-                    if (!password.getText().toString().equals(confirm.getText().toString())) {
-                        message.setText("Password and confirm password unmatched");
-                    } else {
-                        message.setText("");
-                    }
-                }
+                verifyPassword(message, password_view, confirm_view, password, confirm);
             }
         });
 
+        verifyPassword(message, password_view, confirm_view, password, confirm);
+    }
 
-
+    private void verifyPassword(TextView message, TextInputLayout password_view, TextInputLayout confirm_view, TextInputEditText password, TextInputEditText confirm) {
+        if (password.getText().length()>0) {
+            if (password.getTransformationMethod()!=null) {
+                if (!password.getText().toString().equals(confirm.getText().toString())) {
+                    message.setText("Password and confirm password unmatched");
+                } else {
+                    message.setText("");
+                }
+            } else {
+                message.setText("");
+            }
+        } else {
+            message.setText("Specify password");
+        }
     }
 }
